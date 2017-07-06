@@ -9,8 +9,14 @@ module.exports = {
   setupPreprocessorRegistry: function(type, registry) {
     // Inline let is only supported in Ember 2.0 and up.
     var checker = new VersionChecker(this);
-    if (checker.for('ember', 'bower').lt('2.0.0')) {
-      return;
+
+    try {
+      require('ember-source'); // ember-source started from 2.11
+    }
+    catch(e) {
+      if (checker.for('ember', 'bower').lt('2.0.0')) {
+        return;
+      }
     }
 
     registry.add('htmlbars-ast-plugin', {
